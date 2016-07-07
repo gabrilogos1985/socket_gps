@@ -2,15 +2,19 @@ package gps.socket; /**
  * Created by Gabe on 05/07/2016.
  */
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import javax.servlet.http.HttpSessionBindingEvent;
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class InitSocket implements ServletContextListener,
         HttpSessionListener, HttpSessionAttributeListener {
@@ -27,33 +31,15 @@ public class InitSocket implements ServletContextListener,
          initialized(when the Web application is deployed). 
          You can initialize servlet context related data here.
       */
-        try {
-        ServerSocket MyService;
-            ServerSocket socket = new ServerSocket(8989);
-                Socket serviceSocket = socket.accept();
-                final BufferedReader is = new BufferedReader(new InputStreamReader(serviceSocket.getInputStream()));
-                final PrintStream os = new PrintStream(serviceSocket.getOutputStream());
+//        try {        
 // As long as we receive data, echo that data back to the client.
                 System.out.println("Waiting...");
-                new Thread() {
-                    @Override
-                    public void run() {
-            try {
-                while (true) {
-                    String line = is.readLine();
-                    System.out.println(line);
-                    //os.println(line);
-                }
-            }catch (IOException e) {
-                                System.out.println(e);
-                            }
-                        }
-                }.start();
+                new SocketListener().start();
 
-        }
-        catch (IOException e) {
-            System.out.println(e);
-        }
+//        }
+//        catch (IOException e) {
+//            System.out.println(e);
+//        }
     }
 
     public void contextDestroyed(ServletContextEvent sce) {
