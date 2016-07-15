@@ -1,21 +1,35 @@
 package gps.socket;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class SocketListener extends Thread {
 
+	private InetAddress address;
+	private Integer port;
+
+	public SocketListener(int port, InetAddress innetAdd) {
+		this.port = port;
+		this.address = innetAdd;
+	}
+
 	public SocketListener() {
-		// final PrintStream os = new
-		// PrintStream(serviceSocket.getOutputStream());
+
 	}
 
 	@Override
 	public void run() {
+		if(port==null){
+			port=8989;
+		}
 		ServerSocket serverSocket = null;
 		try {
-			 serverSocket = new ServerSocket(8989);
+			if(address == null)
+			 serverSocket = new ServerSocket(port);
+			else
+			serverSocket = new ServerSocket(port,50,address);
 			while (true) {
 				try {
 					Socket serviceSocket = serverSocket.accept();
