@@ -1,5 +1,7 @@
 package gps.socket;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -10,7 +12,7 @@ public class SocketListener extends Thread {
 	private InetAddress address;
 	private Integer port;
 
-	public SocketListener(int port, InetAddress innetAdd) {
+	public SocketListener(Integer port, InetAddress innetAdd) {
 		this.port = port;
 		this.address = innetAdd;
 	}
@@ -51,7 +53,8 @@ public class SocketListener extends Thread {
 		}
 	}
 
-	class EchoThread extends Thread {
+	@Slf4j
+	public static class EchoThread extends Thread {
 		protected Socket socket;
 
 		public EchoThread(Socket clientSocket) {
@@ -79,7 +82,9 @@ public class SocketListener extends Thread {
 					} else {
 						//out.writeBytes(line + "\n\r");
 						//out.flush();
-						System.out.println(String.format("%s-> %s",getOrigin(socket),line));
+						String messageToLog = String.format("%s-> %s", getOrigin(socket), line);
+						System.out.println(messageToLog);
+						log.info(messageToLog);
 					}
 			}
 				} catch (IOException e) {
@@ -95,7 +100,7 @@ public class SocketListener extends Thread {
 		}
 	}
 
-	private String getOrigin(Socket socket) {
+	private static String getOrigin(Socket socket) {
 		return String.format("%s",socket.getRemoteSocketAddress());
 	}
 }
