@@ -34,4 +34,10 @@ public class TestSocket {
             System.out.println(e);
         }
     }
+
+    @org.junit.Test
+    public void name() throws Exception {
+        System.out.println(new StringBuilder("\u0020").append("-"));
+
+    }
 }
